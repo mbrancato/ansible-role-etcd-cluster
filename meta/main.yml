@@ -29,6 +29,6 @@ galaxy_info:
     - kv
     - transactions
 
-dependencies:
-  - role: andrewrothstein.etcd
-    version: v2.1.25
+#dependencies:
+#  - role: andrewrothstein.etcd
+#    version: v2.1.25
