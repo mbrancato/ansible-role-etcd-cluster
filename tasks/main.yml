@@ -26,23 +26,11 @@
     skipinitialspace: yes
   register: checksums
 
-- debug:
-    var: checksums
-
 - name: Record the expected checksum
   set_fact:
     etcd_checksum: "sha256:{{ item.hash }}"
   with_list: "{{ checksums.list }}"
   when: item.file == etcd_archive
-
-- name: download etcd
-  get_url:
-    url: '{{ etcd_archive_url }}'
-    dest: '{{ etcd_tempdir.path }}/{{ etcd_archive }}'
-    checksum: '{{ etcd_checksum }}'
-    timeout: '{{ etcd_download_timeout_seconds }}'
-    mode: 0644
-
 
 - when: not etcd_binary_dir.stat.exists
   block:
