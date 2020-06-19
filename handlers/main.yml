@@ -5,14 +5,15 @@
 - name: restart etcd masters
   become: yes
   become_user: root
-  when: etcd_launch | bool
   service:
     name: etcd
     state: restarted
   run_once: yes
   loop: "{{ groups['all'] }}"
   delegate_to: '{{ item }}'
-  when: hostvars[inventory_hostname].etcd_master | bool
+  when:
+  - etcd_launch | bool
+  - hostvars[inventory_hostname].etcd_master | bool
 
 # Restart non-voting members
 - name: restart etcd members

@@ -1,4 +1,6 @@
 ---
+- include_tasks: "install-{{ ansible_facts.os_family }}.yml"
+
 - name: check for installation of etcd
   become: yes
   stat:
@@ -123,3 +125,6 @@
   - restart etcd members
 
 - include_tasks: '{{ etcd_init_system }}.yml'
+
+- name: Force all notified handlers to run
+  meta: flush_handlers

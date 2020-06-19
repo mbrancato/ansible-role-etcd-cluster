@@ -1,0 +1,6 @@
+---
+- name: Install required packages
+  package:
+    name:
+    - ca-certificates
+    state: present
