@@ -4,6 +4,7 @@ etcd_arch:
   x86_64-64: amd64
   arm-64: arm64
 etcd_mirror: https://github.com/coreos/etcd/releases/download
+etcd_log_level: warn
 
 etcd_download_timeout_seconds: 600
 
@@ -12,7 +13,7 @@ etcd_group: etcd
 etcd_install_dir: /usr/local/bin
 etcd_data_dir: /var/lib/etcd
 
-etcd_master: yes
+etcd_primary: yes
 
 etcd_secure: True
 etcd_pki_dir: ~/pki-dir
@@ -32,3 +33,6 @@ etcd_init_system: systemd
 etcd_launch: True
 
 etcd_enable_v2: True # Accept etcd V2 client requests
+
+etcd_heartbeat_interval: 100
+etcd_election_timeout: 1000

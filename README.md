@@ -1,8 +1,8 @@
-andrewrothstein.etcd-cluster
+etcd Cluster Ansible Role
 ===========================
 [![Build Status](https://travis-ci.org/andrewrothstein/ansible-etcd-cluster.svg?branch=master)](https://travis-ci.org/andrewrothstein/ansible-etcd-cluster)
 
-Configures an etcd cluster. Runs a voting member on every host in the ```etcd-master``` group
+Configures an etcd cluster. Runs a voting member on every host in the ```etcd-primary``` group
 and a proxy on the rest of the hosts in the ```etcd``` group.
 
 Requirements
@@ -30,7 +30,7 @@ example inventory.ini
 host[1:n].test
 
 # voting members
-[etcd-master]
+[etcd-primary]
 host[1:3].test
 ```
 

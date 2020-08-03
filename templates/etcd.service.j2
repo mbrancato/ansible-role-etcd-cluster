@@ -1,14 +1,14 @@
 [Unit]
-Description=Etcd Server
+Description=Etcd Service
 After=network.target
 
 [Service]
 Type=notify
-User={{etcd_user}}
-WorkingDirectory={{etcd_data_dir}}/
+User={{ etcd_user }}
+WorkingDirectory={{ etcd_data_dir }}/
 EnvironmentFile=-/etc/etcd/etcd.conf
 # set GOMAXPROCS to number of processors
-ExecStart=/bin/bash -c "GOMAXPROCS=$(nproc) {{etcd_install_dir}}/etcd"
+ExecStart=/bin/bash -c "GOMAXPROCS=$(nproc) {{ etcd_install_dir }}/etcd -log-level {{ etcd_log_level }} -heartbeat-interval={{ etcd_heartbeat_interval }} -election-timeout={{ etcd_election_timeout }}"
 Restart=on-failure
 LimitNOFILE=65536
 

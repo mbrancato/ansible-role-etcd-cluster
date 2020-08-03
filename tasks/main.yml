@@ -121,10 +121,50 @@
     group: '{{ etcd_group }}'
     mode: 0644
   notify:
-  - restart etcd masters
+  - restart etcd primarys
   - restart etcd members
 
-- include_tasks: '{{ etcd_init_system }}.yml'
+- name: install etcd.service systemd unit
+  become: yes
+  become_user: root
+  register: etcd_service_file
+  with_items:
+    - f: etcd.service
+      d: /etc/systemd/system
+  template:
+    src: '{{ item.f }}.j2'
+    dest: '{{ item.d }}/{{ item.f }}'
+    mode: '{{ item.m | default("0644") }}'
 
-- name: Force all notified handlers to run
-  meta: flush_handlers
+- name: Enable / restart etcd service on primary node
+  become: yes
+  become_user: root
+  systemd:
+    name: etcd
+    daemon_reload: yes
+    state: restarted
+    enabled: yes
+  when:
+  - etcd_launch | bool
+  - hostvars[inventory_hostname].etcd_primary | bool
+  - etcd_service_file.changed
+  register: enable_etcd_primary_nodes
+  until: enable_etcd_primary_nodes is not failed
+  retries: 5
+
+
+- name: Enable / restart etcd service on remaining nodes
+  become: yes
+  become_user: root
+  systemd:
+    name: etcd
+    daemon_reload: yes
+    state: restarted
+    enabled: yes
+  when:
+  - etcd_launch | bool
+  - not hostvars[inventory_hostname].etcd_primary | bool
+  - etcd_service_file.changed
+  register: enable_etcd_remaining_nodes
+  until: enable_etcd_remaining_nodes is not failed
+  retries: 5
